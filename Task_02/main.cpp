@@ -13,26 +13,44 @@ public:
 		last = -1;
 	}
 
-	//copy of one constructor to another
-	SmartArr(const SmartArr& smart) :
-		size(smart.size), array(smart.array), last(smart.last) 
+	//copy one constructor to another
+	SmartArr(const SmartArr& smart)
 	{
-		//std::cout << "Constructor of copy!" << std::endl;
+		int* new_arr = new int[smart.size];
+		for (int i = 0; i < smart.size; ++i)
+			new_arr[i] = smart.array[i];
+		std::cout << "Constructor of copy!" << std::endl;
+	}
+	//operator =
+	SmartArr& operator=(const SmartArr& smart) {
+		if (this == &smart)
+			throw std::runtime_error("Cannot use the same memory!");
+		delete[] array;
+		int* new_arr = new int[smart.size];
+		for (int i = 0; i < smart.size; ++i) {
+			new_arr[i] = smart.array[i];
+		}
+		array = new_arr;
+		return *this;
 	}
 
 	// method to add new element
 	void add_element(int el) {
+		if (last >= size)
+			throw std::runtime_error("Can not add new element as array size exceeded!");
 		last += 1;
 		array[last] = el;
-		if (last >= size)
-			throw std::exception("Can not add new element as array size exceeded!");
+
 	}
 
 	//method to get element by index
 	int get_element(int index) {
-		return array[index];
 		if (index > last)
-			throw std::exception("Can not find index as array size exceeded!");
+			throw std::runtime_error("Can not find index as array size exceeded!");
+		else if (index < 0)
+			throw std::runtime_error("Index is below zero!");
+		return array[index];
+
 	}
 	////destructor
 	~SmartArr() {
@@ -46,16 +64,22 @@ public:
 
 int main() {
 
-	{SmartArr arr(5);
+	SmartArr arr(5);
 	arr.add_element(1);
 	arr.add_element(4);
-	arr.add_element(155); }
+	arr.add_element(155);
 
 	SmartArr new_array(2);
 	new_array.add_element(44);
 	new_array.add_element(34);
 
-	SmartArr arr{new_array};
+	try {
+		arr = new_array;
+		arr = arr;
+	}
+	catch (std::runtime_error& ex) {
+		std::cout << ex.what();
+	}
 	//std::cout << arr.get_element(1);
 
 	return 0;
