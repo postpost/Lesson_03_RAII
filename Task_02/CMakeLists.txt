@@ -4,4 +4,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(Task02)
 set(SOURCES_FILE main.cpp)
-add_executable(Task01 ${SOURCES_FILE})
+add_executable(Task02 ${SOURCES_FILE})
