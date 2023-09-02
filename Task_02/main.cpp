@@ -14,23 +14,30 @@ public:
 	}
 
 	//copy one constructor to another
-	SmartArr(const SmartArr& smart)
+	SmartArr(const SmartArr& other)
 	{
-		int* new_arr = new int[smart.size];
-		for (int i = 0; i < smart.size; ++i)
-			new_arr[i] = smart.array[i];
-		std::cout << "Constructor of copy!" << std::endl;
+		int* new_arr = new int[other.size];
+		this->size = other.size;
+		this->last = other.last;
+		for (int i = 0; i < other.size; ++i)
+			new_arr[i] = other.array[i];
+		this->array = new_arr;
+		//delete[] new_arr;
 	}
+
 	//operator =
-	SmartArr& operator=(const SmartArr& smart) {
-		if (this == &smart)
+	SmartArr& operator=(const SmartArr& other) {
+		if (this == &other)
 			throw std::runtime_error("Cannot use the same memory!");
-		delete[] array;
-		int* new_arr = new int[smart.size];
-		for (int i = 0; i < smart.size; ++i) {
-			new_arr[i] = smart.array[i];
+		delete[] array; //remove current object
+		int* new_arr = new int[other.size];
+		this->size = other.size;
+		this->last = other.last;
+		for (int i = 0; i < other.size; ++i) {
+			new_arr[i] = other.array[i];
 		}
-		array = new_arr;
+		array = new_arr; //pointer to other object
+		//delete[] new_arr; //remove new array from the memory
 		return *this;
 	}
 
@@ -75,7 +82,7 @@ int main() {
 
 	try {
 		arr = new_array;
-		arr = arr;
+		//arr = arr;
 	}
 	catch (std::runtime_error& ex) {
 		std::cout << ex.what();
